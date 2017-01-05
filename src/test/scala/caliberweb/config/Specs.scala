@@ -9,7 +9,7 @@ class Specs extends FlatSpec with Matchers {
   case class AllTheConfig(name: String, sub: SubConfig)
   case class SubConfig(number: Int, level3: Level3Config)
   case class Level3Config(enabled: Boolean, sections: Set[String])
-  
+
   val configuration = ConfigFactory.parseString(
     s"""
        | app {
@@ -26,21 +26,23 @@ class Specs extends FlatSpec with Matchers {
 
   "AllTheConfig" should "be read" in {
 
-    val dsl = getConfig("app") {
-      getString("name") |@| getConfig("sub") {
-        getInt("number") |@| getConfig("nested") {
-          getBoolean("enabled") |@| getStringSet("sections") map Level3Config
-        } map SubConfig
-      } map AllTheConfig
-    }
+    val config =
+      child("app") {
+        string("name") |@|
+          child("sub") {
+            int("number") |@|
+              child("nested") {
+                bool("enabled") |@|
+                  stringSet("sections") map Level3Config
+              } map SubConfig
+          } map AllTheConfig
+      } from configuration
 
-    val config = dsl.readFrom(configuration)
-    
     config.name shouldBe "test"
     config.sub.number shouldBe 42
     config.sub.level3.enabled shouldBe false
     config.sub.level3.sections should contain only("one", "two", "three")
-    
+
   }
 
 }

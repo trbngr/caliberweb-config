@@ -19,12 +19,12 @@ package object config {
 
   type ConfigDsl[A] = FreeApplicative[ConfigOp, A]
 
-  def getInt(field: String): ConfigDsl[Int] = lift(GetInt(field))
-  def getBoolean(field: String): ConfigDsl[Boolean] = lift(GetBoolean(field))
-  def getString(field: String): ConfigDsl[String] = lift(GetString(field))
-  def getStringList(field: String): ConfigDsl[List[String]] = lift(GetStrings(field))
-  def getStringSet(field: String): ConfigDsl[Set[String]] = getStringList(field).map(_.toSet)
-  def getConfig[A](field: String)(dsl: ConfigDsl[A]): ConfigDsl[A] = lift(GetConfig(field, dsl))
+  def int(field: String): ConfigDsl[Int] = lift(GetInt(field))
+  def bool(field: String): ConfigDsl[Boolean] = lift(GetBoolean(field))
+  def string(field: String): ConfigDsl[String] = lift(GetString(field))
+  def stringList(field: String): ConfigDsl[List[String]] = lift(GetStrings(field))
+  def stringSet(field: String): ConfigDsl[Set[String]] = stringList(field).map(_.toSet)
+  def child[A](field: String)(dsl: ConfigDsl[A]): ConfigDsl[A] = lift(GetConfig(field, dsl))
 
   type FromConfig[A] = Config ⇒ A
 
@@ -39,7 +39,7 @@ package object config {
   }
 
   implicit class ConfigReader[A](dsl: ConfigDsl[A])(implicit G: cats.Applicative[FromConfig]){
-    def readFrom(config: Config): A = dsl.foldMap(interpret).apply(config)
+    def from(config: Config): A = dsl.foldMap(interpret).apply(config)
   }
 
 }
