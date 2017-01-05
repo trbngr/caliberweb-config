@@ -27,13 +27,11 @@ class Specs extends FlatSpec with Matchers {
   "AllTheConfig" should "be read" in {
 
     val dsl = getConfig("app") {
-      val sub = getConfig("sub") {
-        val nested = getConfig("nested") {
+      getString("name") |@| getConfig("sub") {
+        getInt("number") |@| getConfig("nested") {
           getBoolean("enabled") |@| getStringSet("sections") map Level3Config
-        }
-        getInt("number") |@| nested map SubConfig
-      }
-      getString("name") |@| sub map AllTheConfig
+        } map SubConfig
+      } map AllTheConfig
     }
 
     val config = dsl.readFrom(configuration)
