@@ -9,13 +9,13 @@ import scala.collection.JavaConverters._
 
 package object config {
 
-  sealed trait ConfigOp[A]
+  sealed abstract class ConfigOp[A] extends Product with Serializable
 
-  case class GetInt(field: String) extends ConfigOp[Int]
-  case class GetBoolean(field: String) extends ConfigOp[Boolean]
-  case class GetString(field: String) extends ConfigOp[String]
-  case class GetStrings(field: String) extends ConfigOp[List[String]]
-  case class GetConfig[A](field: String, dsl: ConfigDsl[A]) extends ConfigOp[A]
+  final case class GetInt(field: String) extends ConfigOp[Int]
+  final case class GetBoolean(field: String) extends ConfigOp[Boolean]
+  final case class GetString(field: String) extends ConfigOp[String]
+  final case class GetStrings(field: String) extends ConfigOp[List[String]]
+  final case class GetConfig[A](field: String, dsl: ConfigDsl[A]) extends ConfigOp[A]
 
   type ConfigDsl[A] = FreeApplicative[ConfigOp, A]
 
