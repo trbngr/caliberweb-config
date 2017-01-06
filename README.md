@@ -9,7 +9,7 @@ I realize that this isn't exactly an original library, but I just started learni
 in build.sbt
 ```
 resolvers += "caliberweb repo" at "https://s3-us-west-2.amazonaws.com/repo.caliberweb.com/release"
-libraryDependencies += "com.caliberweb" %% "typesafe-config" % "1.0"
+libraryDependencies += "com.caliberweb" %% "typesafe-config-dsl" % "1.0"
 ```
 
 ```scala
