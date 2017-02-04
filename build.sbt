@@ -2,7 +2,7 @@ import com.amazonaws.services.s3.model.Region
 
 organization := "com.caliberweb"
 name := "typesafe-config-dsl"
-version := "1.0"
+version := "1.2"
 
 scalaVersion := "2.12.1"
 crossScalaVersions := Seq("2.11.8", "2.12.1")
@@ -22,7 +22,7 @@ scalacOptions := Seq(
 )
 
 libraryDependencies += "com.typesafe" % "config" % "1.3.1"
-libraryDependencies += "org.typelevel" %% "cats-free" % "0.8.1"
+libraryDependencies += "org.typelevel" %% "cats-free" % "0.9.0"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % Test
 
 s3region := Region.US_West_2
@@ -34,10 +34,3 @@ publishTo := {
   val folder = if (isSnapshot.value) "snapshot" else "release"
   Some(s3resolver.value("caliberweb repo", s3(s"repo.caliberweb.com/$folder")) withMavenPatterns)
 }
-
-enablePlugins(MicrositesPlugin)
-tutSettings
-
-micrositeBaseUrl := "/config"
-micrositeGithubOwner := "trbngr"
-micrositeGithubRepo := "caliberweb-config"

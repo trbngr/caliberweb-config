@@ -24,7 +24,7 @@ package object config {
   def string(field: String): ConfigDsl[String] = lift(GetString(field))
   def stringList(field: String): ConfigDsl[List[String]] = lift(GetStrings(field))
   def stringSet(field: String): ConfigDsl[Set[String]] = stringList(field).map(_.toSet)
-  def child[A](field: String)(dsl: ConfigDsl[A]): ConfigDsl[A] = lift(GetConfig(field, dsl))
+  def inSection[A](field: String)(dsl: ConfigDsl[A]): ConfigDsl[A] = lift(GetConfig(field, dsl))
 
   type FromConfig[A] = Config ⇒ A
 

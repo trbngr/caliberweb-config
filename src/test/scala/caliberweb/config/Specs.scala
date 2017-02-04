@@ -27,15 +27,12 @@ class Specs extends FlatSpec with Matchers {
   "AllTheConfig" should "be read" in {
 
     val config =
-      child("app") {
-        string("name") |@|
-          child("sub") {
-            int("number") |@|
-              child("nested") {
-                bool("enabled") |@|
-                  stringSet("sections") map Level3Config
-              } map SubConfig
-          } map AllTheConfig
+      inSection("app") {
+        string("name") |@| inSection("sub") {
+          int("number") |@| inSection("nested") {
+            bool("enabled") |@| stringSet("sections") map Level3Config
+          } map SubConfig
+        } map AllTheConfig
       } from configuration
 
     config.name shouldBe "test"
